@@ -70,10 +70,10 @@ Above T-test shows that the confidence interval holds the value of 0, inferring 
 
 # Conclusion
 
-We can accept the hypothesis that the supp OJ gives increased tooth growth as compared to VC. In addition, the boxplot also displays an approximately linear trendpoint where increasing dosage begets increased tooth length as well, hence we can conclude that increased dosage promotes tooth growth.
+We can accept the hypothesis that the supp OJ gives increased tooth growth as compared to VC. We can also notice that, the boxplot show an approximately linear trendpoint where increasing dosage increased tooth length as well, hence we can conclude that increased dosage promotes tooth growth.
 
 
 # Assumptions
 
-1. Group's (OJ, VC) variances are not equal,
-2. Group's (OJ, VC) are independent of each other, thats why we promote unpaired testing
+1. Groups' (OJ, VC) variances are not equal,
+2. Groups (OJ, VC) are independent of each other, thats why we promote unpaired testing

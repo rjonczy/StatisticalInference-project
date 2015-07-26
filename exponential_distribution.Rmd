@@ -1,0 +1,120 @@
+---
+title: "Comparison of Expotential Distribution to Central Limit Theorem"
+author: "Robert Jończy"
+date: "25.07.2015"
+output: pdf_document
+---
+
+# Overview
+
+In this report I am going to compare expotential distribution to Central Limit Theorem (CLT). According to CLT, distribution of averages of iid variables (independent and identically distributed) becomes standard normal as sample size $n$ increases. Meaning that $\bar X_n$ is approximately $N(\mu, \sigma^2 / n)$
+
+Due to report size limitations, I have turned off R code for plotting. Full repository for this report can be found [here](https://github.com/rjonczy/StatisticalInference-project)
+
+
+Goal of this report is to show that:
+
+1. Sample mean compares to the theoretical mean of the distribution
+2. Sample variance compares to the theoretical variance of the distribution
+3. Distribution is approximately normal.
+
+# Simulations
+
+Below, I draw the 40 samples for size $n = 1000$ from the exponential distribution with $\lambda = 0.2$.
+```{r, echo=FALSE}
+library(ggplot2)
+```
+```{r}
+set.seed(1234)
+nosim <- 1000
+lambda <- 0.2
+n <- 40
+data <- data.frame( x = rexp(nosim * n, lambda))
+averages <- data.frame(x = apply(matrix(data$x,nosim),1,mean))
+```
+
+Below I plot histogram of simulated data and theoretical distribution.
+
+```{r, fig.height=2, fig.width=2, fig.align='center', echo=FALSE}
+
+g <- ggplot(data, aes(x = x))
+g <- g + geom_histogram(alpha = .20, binwidth=0.8, colour = "black", aes(y = ..density..))
+g <- g + stat_function(fun = dexp, 
+                       arg = list(rate = lambda), 
+                       size = 1, 
+                       colour = "red")
+g
+```
+
+
+# Sample Mean vs. Theoretical Mean
+
+Sample mean of 40 exponential distribution with 1,000 simulations:
+```{r}
+(sample.mean <- mean(averages$x))
+```
+
+Mean from theoretical mean of the distribution
+```{r}
+(theoretical.mean <- 1/lambda)
+```
+
+As we can see above simulation mean has converged to the theoretical value of 5. The sample mean of exponential distribution is very close to the theoretical center of the distribution (which is $1/\lambda$).
+
+```{r, fig.height=3, fig.width=3, fig.align='center', echo=FALSE}
+g <- ggplot(averages, aes(x = x))
+g <- g + geom_density()
+g <- g + geom_vline( xintercept = sample.mean, size = .5, color = 'red') 
+g
+```
+
+
+
+# Sample Variance vs. Theoretical Variance
+
+Simulated sample variance:
+```{r}
+(sample.variance <- var(averages$x))
+```
+
+Theoretical variance:
+```{r}
+(theoretical.var <- 1 / (n * lambda^2))
+```
+
+As we can see above the sample variance of exponential distribution and the theoretical variance are very close.
+
+# Comparison of expotential distribution to normal distribution
+
+I am ploting comparing distribution of averages with Normal Distribution ($N(\mu, \sigma^2 / n)$) by ploting histogram of distribution and 
+
+
+```{r, fig.height=3, fig.width=3, fig.align='center', echo=FALSE}
+mu <- 1 / lambda
+sigma <- 1 / lambda
+g <- ggplot(averages, aes(x = x))
+g <- g + geom_histogram(alpha = .10, binwidth=0.1, colour = "black", aes(y = ..density..))
+g <- g + stat_function(geom = "line", 
+                       fun = dnorm, 
+                       arg = list(mean = mu, sd = sigma/sqrt(40)),
+                       size = 1, 
+                       colour = "red", 
+                       fill = NA)
+g
+```
+
+```{r, fig.height=3, fig.width=3}
+par(mar = c(5,5,0,0) + 0.5, mgp = c(2,1,0))
+y <- (averages$x - mu) / (sigma / sqrt(40))  # normalize the data
+qqnorm(y, main = NULL)
+qqline(y)
+```
+
+# Conclusion
+
+
+Key Observations
+
+1. From this simulation, it would appear that the distribution of the sample means will be normal in shape, regardless of the shape of the “parent” population, provided the sample size is large enough. A sample size of n = 40 seemed to be enough to guarantee that the distribution of sample means is normal in shape, even though the samples were drawn from an expontential distribution, a distribution that is a little bit skewed to the left.
+
+2. The mean of the expontential distribution of sample means is identical to the mean of the parent population, the population from which the samples are drawn.

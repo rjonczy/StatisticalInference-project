@@ -86,7 +86,7 @@ As we can see above the sample variance of exponential distribution and the theo
 
 # Comparison of expotential distribution to normal distribution
 
-I am ploting comparing distribution of averages with Normal Distribution ($N(\mu, \sigma^2 / n)$) by ploting histogram of distribution and 
+I am comparing distribution of averages with Normal Distribution ($N(\mu, \sigma^2 / n)$) by ploting histogram of distribution and normal distribution.
 
 
 ```{r, fig.height=3, fig.width=3, fig.align='center', echo=FALSE}
@@ -104,17 +104,14 @@ g
 ```
 
 ```{r, fig.height=3, fig.width=3}
-par(mar = c(5,5,0,0) + 0.5, mgp = c(2,1,0))
+#par(mar = c(5,5,0,0) + 0.5, mgp = c(2,1,0))
 y <- (averages$x - mu) / (sigma / sqrt(40))  # normalize the data
 qqnorm(y, main = NULL)
 qqline(y)
 ```
 
+On above QQ plot of the distribution of averages of 40 normalized exponential random variables we can easly see that the population is normally distributed. 
+
 # Conclusion
 
-
-Key Observations
-
-1. From this simulation, it would appear that the distribution of the sample means will be normal in shape, regardless of the shape of the “parent” population, provided the sample size is large enough. A sample size of n = 40 seemed to be enough to guarantee that the distribution of sample means is normal in shape, even though the samples were drawn from an expontential distribution, a distribution that is a little bit skewed to the left.
-
-2. The mean of the expontential distribution of sample means is identical to the mean of the parent population, the population from which the samples are drawn.
+Performed simulation shows that the distribution of the sample means is approximatly normal. A sample size of $n = 40$ seemed to be enough to guarantee that the distribution of sample means is normal. The mean of the expontential distribution of sample means is very close to the mean of the theoretical population. The same sample variance.

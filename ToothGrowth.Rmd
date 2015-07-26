@@ -1,0 +1,79 @@
+---
+title: "ToothGrowth analysis"
+author: "Robert Jonczy"
+date: "26.07.2015"
+output: pdf_document
+---
+
+# Introduction
+
+# Exploratory analysis
+
+Load `ToothGroowth` dataset:
+
+```{r}
+library(datasets)
+data(ToothGrowth)
+```
+
+Perform basis data exploratory
+```{r}
+str(ToothGrowth)
+
+head(ToothGrowth)
+tail(ToothGrowth)
+```
+As we can see this dataset contains length of odontoblasts (teeth) in each of 10 guinea pigs at each of three dose levels of Vitamin C (0.5, 1, and 2 mg) with each of two delivery methods orange juice (OJ) or ascorbic acid (VC).
+
+```{r, echo=FALSE, fig.height=4, fig.width=6}
+library(ggplot2)
+g <- ggplot(ToothGrowth, aes(x = factor(dose), y=len))
+g <- g + geom_boxplot()
+g <- g + facet_grid(~supp)
+g <- g + ggtitle('ToothGrowth data')
+g
+```
+
+From the above plot we can see that with increase in dose level (0.5 mg to 2 mg) results in increased tooth growth. For low dose levels (0.5 mg and 1 mg) orange juice (OJ) suggests to have larger effect on tooth growth than ascorbic acid (VC). Below i will perform some statistical analysis of a data.
+
+# Data summary
+
+```{r}
+library(plyr)
+data_summary <- ddply(ToothGrowth , .(dose, supp) , summarize, mean = mean(len), sd = sd(len))
+as.factor(data_summary$dose)
+data_summary
+```
+
+# Confidence intervals
+
+### affect of 0.5 mg dose
+```{r}
+tw05 <- subset(ToothGrowth, dose == 0.5)
+t.test(len ~ supp, data = tw05, paired = FALSE)
+```
+Above T-test shows that the confidence interval is above 0, inferring that we reject the null hypothesis and accept that tooth growth is affected significantly by supp when dose is at 0.5. 
+
+### affect of 1.0 mg dose
+```{r}
+tw10 <- subset(ToothGrowth, dose == 1.0)
+t.test(len ~ supp, data = tw10, paired = FALSE)
+```
+Above T-test shows that the confidence interval is above 0, inferring that we reject the null hypothesis and accept that tooth growth is affected significantly by supp when dose is at 1.0. 
+
+### affect of 2.0 mg dose
+```{r}
+tw20 <- subset(ToothGrowth, dose == 2.0)
+t.test(len ~ supp, data = tw20, paired = FALSE)
+```
+Above T-test shows that the confidence interval holds the value of 0, inferring that we reject the alternative hypothesis and accept that tooth growth is not affected significantly by supp when dose is at 2.0. 
+
+# Conclusion
+
+We can accept the hypothesis that the supp OJ gives increased tooth growth as compared to VC. In addition, the boxplot also displays an approximately linear trendpoint where increasing dosage begets increased tooth length as well, hence we can conclude that increased dosage promotes tooth growth.
+
+
+# Assumptions
+
+1. Group's (OJ, VC) variances are not equal,
+2. Group's (OJ, VC) are independent of each other, thats why we promote unpaired testing
